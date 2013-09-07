@@ -23,8 +23,8 @@ public class MaxIteratee implements Iteratee<Integer, Integer> {
     }
 
     @Override
-    public <B> Future<B> handle(Function<Iteratee<Integer, Integer>, Future<B>> step) {
-        return step.apply(Iteratee.Cont(handler));
+    public <B> Future<B> handle(Function<Iteratee<Integer, Integer>, Future<B>> folder) {
+        return folder.apply(Iteratee.Cont(handler));
     }
 
     private static Integer max(Integer a, Integer b) {
