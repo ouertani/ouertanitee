@@ -18,7 +18,7 @@ Due to non monadic java future support some features are not complete, but it's 
 
 - Run it using Enumerator (optional)
 		
-			default <B> Input<B> run(Iteratee<E, B> it) 
+		default <B> Input<B> run(Iteratee<E, B> it) 
 
 
 #Examples 
