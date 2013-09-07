@@ -28,8 +28,7 @@ public interface Enumerator<E> {
       
         switch (it.onState()) {
             case CONT:
-                Future<Iteratee<E, B>> apply = this.apply(it);
-                return run(apply);
+                return run(apply(it));
             case ERROR:
                 Iteratee.Error e = (Iteratee.Error) it;
                 throw new RuntimeException(e.getMsg());
