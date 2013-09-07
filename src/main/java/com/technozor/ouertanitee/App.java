@@ -19,8 +19,8 @@ public class App {
         Enumerator lit2 = Enumerator.enumInput(in2);
         Enumerator lit3 = Enumerator.enumInput(in3);
         
-        Future<Iteratee<Integer,Integer>> summer = FutureUtils.toFuture(new SumIteratee()); 
-       Future<Iteratee<Integer,Integer>> maxer = FutureUtils.toFuture(new MaxIteratee()); 
+        Iteratee<Integer,Integer> summer = new SumIteratee(); 
+       Iteratee<Integer,Integer> maxer = new MaxIteratee(); 
         Input run = lit1.run(summer);
         lit1.run(summer);
         lit1.run(summer);

@@ -23,11 +23,9 @@ public interface Enumerator<E> {
             }
         };
     }
-
-    default <B> Input<B> run(Future<Iteratee<E, B>> fit) {
-
-        Iteratee<E, B> it = FutureUtils.fetch(fit);
-
+    
+    default <B> Input<B> run(Iteratee<E, B> it) {
+      
         switch (it.onState()) {
             case CONT:
                 Future<Iteratee<E, B>> apply = this.apply(it);
@@ -41,6 +39,10 @@ public interface Enumerator<E> {
             default:
                 throw new IllegalStateException();
         }
+    }
+
+    default <B> Input<B> run(Future<Iteratee<E, B>> fit) {
+        return run(FutureUtils.fetch(fit));
     }
 
     static <B> Enumerator<B> enumInput(Input<B> input) {

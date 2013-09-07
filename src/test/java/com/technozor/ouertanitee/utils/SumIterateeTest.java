@@ -41,7 +41,7 @@ public class SumIterateeTest  {
     public void basicSummer(){
         Input[] in1 =  {Input.el(5),Input.el(2),Input.EOF };
         Enumerator enumerator = Enumerator.enumInput(in1);
-        Future<Iteratee<Integer,Integer>> summer = FutureUtils.toFuture(new SumIteratee()); 
+        Iteratee<Integer,Integer> summer = new SumIteratee(); 
         Input result = enumerator.run(summer);
         org.junit.Assert.assertSame(result.onState(), Input.InputState.EL);
         org.junit.Assert.assertSame("should be same",((Input.El) result).getE(), 7);
@@ -52,7 +52,7 @@ public class SumIterateeTest  {
         Input[] in1 =  {Input.el(5),Input.el(2),Input.EOF };
         
         Enumerator enumerator = Enumerator.enumInput(in1);
-        Future<Iteratee<Integer,Integer>> summer = FutureUtils.toFuture(new SumIteratee()); 
+        Iteratee<Integer,Integer> summer = new SumIteratee(); 
         enumerator.run(summer);
         Input result = enumerator.run(summer);
         enumerator.run(summer);
@@ -66,7 +66,7 @@ public class SumIterateeTest  {
         Input[] in2 =  {Input.el(1),Input.el(4), Input.el(3) , Input.EOF };
         Enumerator enumerator1 = Enumerator.enumInput(in1);
         Enumerator enumerator2 = Enumerator.enumInput(in2);
-        Future<Iteratee<Integer,Integer>> summer1 = FutureUtils.toFuture(new SumIteratee()); 
+        Iteratee<Integer,Integer> summer1 = new SumIteratee(); 
         
         enumerator1.run(summer1);
         enumerator2.run(summer1);
@@ -87,7 +87,7 @@ public class SumIterateeTest  {
         Input[] in2 =  {Input.el(1),Input.EMPTY ,Input.el(4), Input.EMPTY , Input.el(3) , Input.EOF, Input.el(100)  };
         Enumerator enumerator1 = Enumerator.enumInput(in1);
         Enumerator enumerator2 = Enumerator.enumInput(in2);
-        Future<Iteratee<Integer,Integer>> summer1 = FutureUtils.toFuture(new SumIteratee()); 
+        Iteratee<Integer,Integer> summer1 = new SumIteratee(); 
         
         enumerator1.run(summer1);
         enumerator2.run(summer1);
@@ -109,7 +109,7 @@ public class SumIterateeTest  {
         Input[] in2 =  {Input.el(1),Input.EMPTY ,Input.el(4), Input.EMPTY , Input.el(3) , Input.EOF };
         Enumerator enumerator1 = Enumerator.enumInput(in1);
         Enumerator enumerator2 = Enumerator.enumInput(in2);
-        Future<Iteratee<Integer,Integer>> summer1 = FutureUtils.toFuture(new SumIteratee()); 
+        Iteratee<Integer,Integer> summer1 = new SumIteratee(); 
         
         enumerator1.run(summer1);
         enumerator2.run(summer1);

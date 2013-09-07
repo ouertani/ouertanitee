@@ -42,8 +42,8 @@ public class SumMaxIterateeTest  {
     public void basicMaxSumer(){
         Input[] in1 =  {Input.el(5),Input.el(2),Input.EOF };
         Enumerator enumerator = Enumerator.enumInput(in1);
-        Future<Iteratee<Integer,Integer>> maxer = FutureUtils.toFuture(new MaxIteratee()); 
-        Future<Iteratee<Integer,Integer>>  summer = FutureUtils.toFuture(new SumIteratee()); 
+        Iteratee<Integer,Integer> maxer = new MaxIteratee(); 
+        Iteratee<Integer,Integer>  summer = new SumIteratee(); 
         Input result1 = enumerator.run(summer);
         Input result2 = enumerator.run(maxer);
         org.junit.Assert.assertSame(result1.onState(), Input.InputState.EL);
@@ -60,8 +60,8 @@ public class SumMaxIterateeTest  {
         Input[] in2 =  {Input.el(1),Input.EMPTY ,Input.el(4), Input.EMPTY , Input.el(3) , Input.EOF };
         Enumerator enumerator1 = Enumerator.enumInput(in1);
         Enumerator enumerator2 = Enumerator.enumInput(in2);
-        Future<Iteratee<Integer,Integer>> maxer = FutureUtils.toFuture(new MaxIteratee()); 
-         Future<Iteratee<Integer,Integer>> summer = FutureUtils.toFuture(new SumIteratee()); 
+        Iteratee<Integer,Integer> maxer = new MaxIteratee(); 
+        Iteratee<Integer,Integer> summer = new SumIteratee(); 
       
         
         Input result1 = enumerator1.run(summer);
