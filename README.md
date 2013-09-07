@@ -8,7 +8,7 @@ Due to non monadic java future support some features are not complete, but it's 
 
 #Usage
 
-- Define Iterator 
+- Implement an Iteratee 
 
 
 		public interface Iteratee<E, A> {
