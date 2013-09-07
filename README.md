@@ -8,7 +8,7 @@ Due to non monadic java future support some features are not complete, but it's 
 
 #Usage
 
-- define Iterator 
+- dDfine Iterator 
 
 
 		public interface Iteratee<E, A> {
@@ -16,7 +16,7 @@ Due to non monadic java future support some features are not complete, but it's 
     		<B> Future<B> handle(Function<Iteratee<E, A>, Future<B>> step);
     	}	
 
-- run it using Enumerator (optional)
+- Run it using Enumerator (optional)
 		
 			default <B> Input<B> run(Iteratee<E, B> it) 
 
@@ -24,6 +24,7 @@ Due to non monadic java future support some features are not complete, but it's 
 #Examples 
 
 *[SumIteratee](https://github.com/ouertani/ouertanitee/blob/master/src/main/java/com/technozor/ouertanitee/samples/SumIteratee.java)
+
 *[MaxIteratee](https://github.com/ouertani/ouertanitee/blob/master/src/main/java/com/technozor/ouertanitee/samples/MaxIteratee.java)
 
 Please refer to test cases for more details.
