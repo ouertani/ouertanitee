@@ -34,4 +34,11 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <developers>
+      <developer>
+          <email>ouertani@gmail.com</email>
+          <name>@ouertani</name>
+          <url>ouertani.github.io</url>
+      </developer>
+  </developers>
 </project>
