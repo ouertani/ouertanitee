@@ -4,8 +4,7 @@ ouertanitee
 
 This is  a basic implementation of iteratee using jdk8. 
 
-Due to non monadic java future support some features are not complete, but it's first version but will be sonner ( Enumeratee,Stream, Generics... )
-
+Due to non monadic java future support some features are not complete, but it's first version.
 #Usage
 
 - Implement an Iteratee 
@@ -28,3 +27,7 @@ Due to non monadic java future support some features are not complete, but it's 
 *[MaxIteratee](https://github.com/ouertani/ouertanitee/blob/master/src/main/java/com/technozor/ouertanitee/samples/MaxIteratee.java)
 
 Please refer to test cases for more details.
+
+# Roadmap
+
+Enumeratee,Stream, Generics... 
