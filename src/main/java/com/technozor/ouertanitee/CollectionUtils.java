@@ -4,7 +4,6 @@ package com.technozor.ouertanitee;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -13,7 +12,7 @@ import java.util.stream.Stream;
  */
 public interface CollectionUtils {
 
-    static <A, B> B leftFold(List<A> l, B initialValue,  BiFunction<A, B, B> folder) {
+    static <A, B> B leftFold(B initialValue, List<A> l,  BiFunction<A, B, B> folder) {
         B acc = initialValue;
         for (A a : l) {
             acc = folder.apply(a, acc);
@@ -22,11 +21,10 @@ public interface CollectionUtils {
     }
 
     
-    static <A, B> B leftFoldM(List<A> l, B initialValue,  BiFunction<A, B, CompletableFuture<B>> folder) {
+    static <A, B> B leftFoldM(B initialValue, List<A> l,  BiFunction<A, B, CompletableFuture<B>> folder) {
         B acc = initialValue;
         for (A a : l) {
-          
-            acc = FutureUtils.fetch(folder.apply(a, acc));
+          acc = FutureUtils.fetch(folder.apply(a, acc));
         }
         return acc;
     }
