@@ -4,7 +4,7 @@ ouertanitee
 
 This is  a basic implementation of iteratee using jdk8. 
 
-Due to non monadic java future support some features are not complete, but it's the first version.
+Some features are not full complete, but it's the first version.
 #Usage
 
 - Implement an Iteratee 
