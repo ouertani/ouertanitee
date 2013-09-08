@@ -1,5 +1,6 @@
 package com.technozor.ouertanitee;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
@@ -10,7 +11,7 @@ import java.util.function.Function;
  */
 public interface Iteratee<E, A> {
 
-    <B> Future<B> handle(Function<Iteratee<E, A>, Future<B>> step);
+    <B> CompletableFuture<B> handle(Function<Iteratee<E, A>, CompletableFuture<B>> step);
 
     default Function<Input<E>, Iteratee<E, A>> handler() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -69,7 +70,7 @@ public interface Iteratee<E, A> {
         }
 
         @Override
-        public <B> Future<B> handle(Function<Iteratee<E, A>, Future<B>> folder) {
+        public <B> CompletableFuture<B> handle(Function<Iteratee<E, A>, CompletableFuture<B>> folder) {
             return folder.apply(Iteratee.Done(a, input));
         }
 
@@ -108,7 +109,7 @@ public interface Iteratee<E, A> {
         }
 
         @Override
-        public <B> Future<B> handle(Function<Iteratee<E, A>, Future<B>> folder) {
+        public <B> CompletableFuture<B> handle(Function<Iteratee<E, A>, CompletableFuture<B>> folder) {
             return folder.apply(Iteratee.Cont(k));
         }
 
@@ -138,7 +139,7 @@ public interface Iteratee<E, A> {
         }
 
         @Override
-        public <B> Future<B> handle(Function<Iteratee<E, Object>, Future<B>> folder) {
+        public <B> CompletableFuture<B> handle(Function<Iteratee<E, Object>, CompletableFuture<B>> folder) {
             return folder.apply(Iteratee.Error(msg, input));
         }
 

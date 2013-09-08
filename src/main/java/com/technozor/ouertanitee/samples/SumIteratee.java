@@ -4,6 +4,7 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 import com.technozor.ouertanitee.Input;
 import com.technozor.ouertanitee.Iteratee;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author slim ouertani
@@ -32,7 +33,7 @@ public class SumIteratee implements Iteratee<Integer, Integer> {
     }
 
     @Override
-    public <B> Future<B> handle(Function<Iteratee<Integer, Integer>, Future<B>> step) {
+    public <B> CompletableFuture<B> handle(Function<Iteratee<Integer, Integer>, CompletableFuture<B>> step) {
         return step.apply(Iteratee.Cont(handler));
     }
 

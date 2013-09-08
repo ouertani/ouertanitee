@@ -3,10 +3,11 @@ package com.technozor.ouertanitee;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
 
@@ -16,13 +17,13 @@ import java.util.stream.Stream;
 @FunctionalInterface
 public interface Enumerator<E> {
 
-    <A> Future<Iteratee<E, A>> apply(Iteratee<E, A> it);
+    <A> CompletableFuture<Iteratee<E, A>> apply(Iteratee<E, A> it);
 
     static <E> Enumerator<E> empty() {
         return new Enumerator<E>() {
             @Override
-            public <A> Future<Iteratee<E, A>> apply(Iteratee<E, A> it) {
-                return CompletableFuture.supplyAsync(() -> it);
+            public <A> CompletableFuture<Iteratee<E, A>> apply(Iteratee<E, A> it) {
+                return CompletableFuture.completedFuture(it);
             }
         };
     }
@@ -43,7 +44,7 @@ public interface Enumerator<E> {
         }
     }
 
-    default <B> Input<B> run(Future<Iteratee<E, B>> fit) {
+    default <B> Input<B> run(CompletableFuture<Iteratee<E, B>> fit) {
         return run(FutureUtils.fetch(fit));
     }
 
@@ -51,8 +52,8 @@ public interface Enumerator<E> {
         return new Enumerator<B>() {
 
             @Override
-            public <A> Future<Iteratee<B, A>> apply(Iteratee<B, A> it) {
-                Function<Iteratee<B, A>, Future<Iteratee<B, A>>> step = (Iteratee<B, A> t) -> {
+            public <A> CompletableFuture<Iteratee<B, A>> apply(Iteratee<B, A> it) {
+                Function<Iteratee<B, A>, CompletableFuture<Iteratee<B, A>>> step = (Iteratee<B, A> t) -> {
                     switch (t.onState()) {
                         case CONT:
                             
@@ -62,7 +63,7 @@ public interface Enumerator<E> {
                             });
                             
                         default:
-                            return CompletableFuture.supplyAsync(() -> t);
+                            return CompletableFuture.completedFuture(t);
                     }
                 };
                 return it.handle(step);
@@ -84,7 +85,7 @@ public interface Enumerator<E> {
             case 1:
                 return new Enumerator<B>() {
                 @Override
-                public <A> Future<Iteratee<B, A>> apply(Iteratee<B, A> i) {
+                public <A> CompletableFuture<Iteratee<B, A>> apply(Iteratee<B, A> i) {
 
                     return i.handle((Iteratee<B, A> t) -> {
                         switch (t.onState()) {
@@ -95,7 +96,7 @@ public interface Enumerator<E> {
                                 return c.getK().apply(input[0]);
                             });
                             default:
-                                return CompletableFuture.supplyAsync(() -> t);
+                                return CompletableFuture.completedFuture(t);
                         }
                     });
                 }
@@ -106,7 +107,7 @@ public interface Enumerator<E> {
                 List<Input<B>> of = Arrays.asList(input);
                 return new Enumerator<B>() {
                     @Override
-                    public <A> Future<Iteratee<B, A>> apply(Iteratee<B, A> it) {
+                    public <A> CompletableFuture<Iteratee<B, A>> apply(Iteratee<B, A> it) {
                         return enumSeq(of, it);
                     }
                 };
@@ -115,7 +116,9 @@ public interface Enumerator<E> {
     }
     
     static <B> Enumerator<B> enumInput(final B... input) {
-        return enumInput(Stream.of(input));
+        Input<B>[] toArray = (Input<B>[]) Stream.of(input).map(t -> Input.el(t)).toArray();
+        
+        return enumInput(Arrays.asList(toArray).add(Input.EOF));
     }
     /**
      * Need to add Eof at the end
@@ -130,28 +133,27 @@ public interface Enumerator<E> {
        
     }
      
-      static <E, A> Future<Iteratee<E, A>> enumStream(Stream<Input<E>>  l, Iteratee<E, A> i) {
-          BiFunction<Input<E>, Iteratee<E, A>, Future<Iteratee<E, A>>> f = (Input<E> t, Iteratee<E, A> u) -> {
+      static <E, A> CompletableFuture<Iteratee<E, A>> enumStream(Stream<Input<E>>  l, Iteratee<E, A> i) {
+          BiFunction<Input<E>, Iteratee<E, A>, CompletableFuture<Iteratee<E, A>>> f = (Input<E> t, Iteratee<E, A> u) -> {
               switch(u.onState()) {
                   case CONT :
                       return CompletableFuture.supplyAsync(() -> u.handler().apply(t));
                    default:
-                    return CompletableFuture.supplyAsync(() -> u);    
+                    return CompletableFuture.completedFuture(u);   
               }
           };
-          ;
           return CompletableFuture.supplyAsync(() -> CollectionUtils.leftFoldM(i,l, f));
       }
 
-    static <E, A> Future<Iteratee<E, A>> enumSeq(List<Input<E>> l, Iteratee<E, A> i) {
-        BiFunction<Input<E>, Iteratee<E, A>, Future<Iteratee<E, A>>> f = (Input<E> a, Iteratee<E, A> it) -> {
+    static <E, A> CompletableFuture<Iteratee<E, A>> enumSeq(List<Input<E>> l, Iteratee<E, A> i) {
+        BiFunction<Input<E>, Iteratee<E, A>, CompletableFuture<Iteratee<E, A>>> f = (Input<E> a, Iteratee<E, A> it) -> {
          
             switch (it.onState()) {
                 case CONT:
                     return CompletableFuture.supplyAsync(() -> it.handler().apply(a));
 
                 default:
-                    return CompletableFuture.supplyAsync(() -> it);
+                    return CompletableFuture.completedFuture(it);
             }
         };
 
