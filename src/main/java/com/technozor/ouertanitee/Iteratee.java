@@ -1,7 +1,6 @@
 package com.technozor.ouertanitee;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.function.Function;
 
 /**
