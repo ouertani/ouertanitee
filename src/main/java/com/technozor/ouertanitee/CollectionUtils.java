@@ -19,27 +19,24 @@ public interface CollectionUtils {
         }
         return acc;
     }
-
     
-    static <A, B> B leftFoldM(B initialValue, List<A> l,  BiFunction< B,A, CompletableFuture<B>> folder) {
+    static <A, B> CompletableFuture<B> leftFoldM(B initialValue, List<A> l,  BiFunction< B,A, CompletableFuture<B>> folder) {
         switch(l.size()){
-            case 0 : return initialValue;
+            case 0 : return CompletableFuture.completedFuture(initialValue);
             default : 
             A head = l.get(0);
             List<A> tail = l.subList(1, l.size());
             CompletableFuture<B> apply = folder.apply(initialValue, head);
-            return apply.thenApplyAsync(in -> leftFoldM(in, tail,folder)).join();
+            return FutureUtils.flatMap(apply.thenApplyAsync(in -> leftFoldM(in, tail,folder)));
         }
-        
-        
     }
     
-    static <A, B> B leftFoldM( B initialValue, Stream<A> l, BiFunction< B,A, CompletableFuture<B>> f) {
+    static <A, B> CompletableFuture<B>  leftFoldM( B initialValue, Stream<A> l, BiFunction< B,A, CompletableFuture<B>> f) {
         B acc = initialValue;
         Iterator<A> iterator = l.iterator();
         while(iterator.hasNext()){
             acc = f.apply( acc,iterator.next()).join();
         }
-        return acc;
+        return CompletableFuture.completedFuture(acc);
     }
 }

@@ -139,7 +139,7 @@ public interface Enumerator<E> {
                     return CompletableFuture.completedFuture(u);   
               }
           };
-          return CompletableFuture.supplyAsync(() -> CollectionUtils.leftFoldM(i,l, f));
+          return CollectionUtils.leftFoldM(i,l, f);
       }
 
     static <E, A> CompletableFuture<Iteratee<E, A>> enumSeq(List<Input<E>> l, Iteratee<E, A> i) {
@@ -154,7 +154,7 @@ public interface Enumerator<E> {
             }
         };
 
-        return CompletableFuture.supplyAsync(() -> CollectionUtils.leftFoldM( i, l,f));
+        return  CollectionUtils.leftFoldM( i, l,f);
     }
 
 }
