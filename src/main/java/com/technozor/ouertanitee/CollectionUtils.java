@@ -30,7 +30,15 @@ public interface CollectionUtils {
             return FutureUtils.flatMap(apply.thenApplyAsync(in -> leftFoldM(in, tail,folder)));
         }
     }
-    
+    /**
+     * using reduce in progress
+     * @param <A>
+     * @param <B>
+     * @param initialValue
+     * @param l
+     * @param f
+     * @return 
+     */
     static <A, B> CompletableFuture<B>  leftFoldM( B initialValue, Stream<A> l, BiFunction< B,A, CompletableFuture<B>> f) {
         B acc = initialValue;
         Iterator<A> iterator = l.iterator();
