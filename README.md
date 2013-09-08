@@ -12,7 +12,7 @@ Some features are not full complete, but it's the first version.
 
 		public interface Iteratee<E, A> {
 
-    		<B> Future<B> handle(Function<Iteratee<E, A>, Future<B>> step);
+    		<B> CompletableFuture<B> handle(Function<Iteratee<E, A>, CompletableFuture<B>> step);
     	}	
 
 - Run it using Enumerator (optional)
