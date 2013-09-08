@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 
 /**
@@ -73,7 +76,7 @@ public interface Enumerator<E> {
      * @param input
      * @return
      */
-    static <B> Enumerator<B> enumInput(final Input<B>[] input) {
+    static <B> Enumerator<B> enumInput(final Input<B>... input) {
 
         switch (input.length) {
             case 0:
@@ -110,11 +113,39 @@ public interface Enumerator<E> {
         }
 
     }
+    
+    static <B> Enumerator<B> enumInput(final B... input) {
+        return enumInput(Stream.of(input));
+    }
+    /**
+     * Need to add Eof at the end
+     * @param <B>
+     * @param input
+     * @return 
+     */
+     static <B> Enumerator<B> enumInput(Stream<B> input) {
+        Stream<Input<B>> map = input.map(t -> Input.el(t));
+        Enumerator<B> empty = Enumerator.empty();
+        
+        return null;
+    }
+     
+      static <E, A> Future<Iteratee<E, A>> enumStream(Stream<Input<E>>  l, Iteratee<E, A> i) {
+          BiFunction<Input<E>, Iteratee<E, A>, Future<Iteratee<E, A>>> f = (Input<E> t, Iteratee<E, A> u) -> {
+              switch(u.onState()) {
+                  case CONT :
+                      return CompletableFuture.supplyAsync(() -> u.handler().apply(t));
+                   default:
+                    return CompletableFuture.supplyAsync(() -> u);    
+              }
+          };
+          ;
+          return CompletableFuture.supplyAsync(() -> CollectionUtils.leftFoldM(i,l, f));
+      }
 
     static <E, A> Future<Iteratee<E, A>> enumSeq(List<Input<E>> l, Iteratee<E, A> i) {
-        Function<Tuple<Input<E>, Iteratee<E, A>>, Future<Iteratee<E, A>>> f = (Tuple<Input<E>, Iteratee<E, A>> t) -> {
-            Input<E> a = t._1();
-            Iteratee<E, A> it = t._2();
+        BiFunction<Input<E>, Iteratee<E, A>, Future<Iteratee<E, A>>> f = (Input<E> a, Iteratee<E, A> it) -> {
+         
             switch (it.onState()) {
                 case CONT:
                     return CompletableFuture.supplyAsync(() -> it.handler().apply(a));
