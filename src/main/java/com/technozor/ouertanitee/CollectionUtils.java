@@ -38,7 +38,7 @@ public interface CollectionUtils {
         B acc = initialValue;
         Iterator<A> iterator = l.iterator();
         while(iterator.hasNext()){
-            acc = FutureUtils.fetch(f.apply( acc,iterator.next()));
+            acc = f.apply( acc,iterator.next()).join();
         }
         return acc;
     }

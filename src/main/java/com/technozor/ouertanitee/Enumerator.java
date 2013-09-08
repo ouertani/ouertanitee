@@ -43,7 +43,7 @@ public interface Enumerator<E> {
     }
 
     default <B> Input<B> run(CompletableFuture<Iteratee<E, B>> fit) {
-        return run(FutureUtils.fetch(fit));
+        return run(fit.join());
     }
 
     static <B> Enumerator<B> enumInput(Input<B> input) {
