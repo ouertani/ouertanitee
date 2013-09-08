@@ -1,6 +1,5 @@
 package com.technozor.ouertanitee.samples;
 
-import java.util.concurrent.Future;
 import java.util.function.Function;
 import com.technozor.ouertanitee.Input;
 import com.technozor.ouertanitee.Iteratee;

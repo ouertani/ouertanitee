@@ -9,10 +9,6 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface FutureUtils {
 
-    static <T> CompletableFuture<T> toFuture(T t) {
-        return CompletableFuture.supplyAsync(() -> t);
-    }
-    
     static<T> CompletableFuture<T> flatMap(CompletableFuture<CompletableFuture<T>> f){
         return f.thenApplyAsync(t -> t.join());
     }
