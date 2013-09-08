@@ -126,8 +126,8 @@ public interface Enumerator<E> {
      static <B> Enumerator<B> enumInput(Stream<B> input) {
         Stream<Input<B>> map = input.map(t -> Input.el(t));
         Enumerator<B> empty = Enumerator.empty();
-        
-        return null;
+        throw new RuntimeException("Not implemented yet");
+       
     }
      
       static <E, A> Future<Iteratee<E, A>> enumStream(Stream<Input<E>>  l, Iteratee<E, A> i) {
