@@ -132,7 +132,7 @@ public interface Enumerator<E> {
     }
      
       static <E, A> CompletableFuture<Iteratee<E, A>> enumStream(Stream<Input<E>>  l, Iteratee<E, A> i) {
-          BiFunction<Input<E>, Iteratee<E, A>, CompletableFuture<Iteratee<E, A>>> f = (Input<E> t, Iteratee<E, A> u) -> {
+          BiFunction<Iteratee<E, A>,Input<E>,  CompletableFuture<Iteratee<E, A>>> f = ( Iteratee<E, A> u,Input<E> t) -> {
               switch(u.onState()) {
                   case CONT :
                       return CompletableFuture.supplyAsync(() -> u.handler().apply(t));
@@ -144,7 +144,7 @@ public interface Enumerator<E> {
       }
 
     static <E, A> CompletableFuture<Iteratee<E, A>> enumSeq(List<Input<E>> l, Iteratee<E, A> i) {
-        BiFunction<Input<E>, Iteratee<E, A>, CompletableFuture<Iteratee<E, A>>> f = (Input<E> a, Iteratee<E, A> it) -> {
+        BiFunction<Iteratee<E, A>,Input<E> , CompletableFuture<Iteratee<E, A>>> f = ( Iteratee<E, A> it,Input<E> a) -> {
          
             switch (it.onState()) {
                 case CONT:

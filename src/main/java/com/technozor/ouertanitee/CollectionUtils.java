@@ -21,19 +21,24 @@ public interface CollectionUtils {
     }
 
     
-    static <A, B> B leftFoldM(B initialValue, List<A> l,  BiFunction<A, B, CompletableFuture<B>> folder) {
-        B acc = initialValue;
-        for (A a : l) {
-          acc = FutureUtils.fetch(folder.apply(a, acc));
+    static <A, B> B leftFoldM(B initialValue, List<A> l,  BiFunction< B,A, CompletableFuture<B>> folder) {
+        switch(l.size()){
+            case 0 : return initialValue;
+            default : 
+            A head = l.get(0);
+            List<A> tail = l.subList(1, l.size());
+            CompletableFuture<B> apply = folder.apply(initialValue, head);
+            return apply.thenApplyAsync(in -> leftFoldM(in, tail,folder)).join();
         }
-        return acc;
+        
+        
     }
     
-    static <A, B> B leftFoldM( B initialValue, Stream<A> l, BiFunction< A,B, CompletableFuture<B>> f) {
+    static <A, B> B leftFoldM( B initialValue, Stream<A> l, BiFunction< B,A, CompletableFuture<B>> f) {
         B acc = initialValue;
         Iterator<A> iterator = l.iterator();
         while(iterator.hasNext()){
-            acc = FutureUtils.fetch(f.apply(iterator.next(), acc));
+            acc = FutureUtils.fetch(f.apply( acc,iterator.next()));
         }
         return acc;
     }
