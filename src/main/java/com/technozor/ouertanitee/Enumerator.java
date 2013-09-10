@@ -29,7 +29,8 @@ public interface Enumerator<E> {
       
         switch (it.onState()) {
             case CONT:
-                return run(apply(it));
+               
+                return  apply(it).thenApplyAsync(x-> run (x)).join();
             case ERROR:
                 Iteratee.Error e = (Iteratee.Error) it;
                 throw new RuntimeException(e.getMsg());
@@ -41,9 +42,7 @@ public interface Enumerator<E> {
         }
     }
 
-    default <B> Input<B> run(CompletableFuture<Iteratee<E, B>> fit) {
-        return run(fit.join());
-    }
+    
 
     static <B> Enumerator<B> enumInput(Input<B> input) {
         return new Enumerator<B>() {
